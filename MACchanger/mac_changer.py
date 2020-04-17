@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import subprocess
 import optparse
+import re
 
 def get_args():
     parser = optparse.OptionParser()
@@ -32,8 +33,23 @@ def change_mac(interface, new_mac):
     subprocess.call(["ifconfig", interface, "hw", "ether", new_mac])
     subprocess.call(["ifconfig", interface, "up"])
 
+def get_current_mac(interface):
+
+    ifconfig_result = subprocess.check_output(["ifconfig", interface])
+    mac_address_search_result = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", ifconfig_result)
+    if mac_address_search_result:
+        return mac_address_search_result.group(0)
+    else:
+        print("[-] Could not read Mac Address")
+    # El grupo de resultados que arroja en este caso queremos el primero y lo guarda en una lista.
+
+
+
 options = get_args()
 
-# change_mac(options.interface, options.new_mac)
-ifconfig_result = subprocess.check_output(["ifconfig", options.interface])
-print(ifconfig_result)
+current_mac = get_current_mac(options.interface)
+# Si lo dejamos asi + current_mac cuando llege al else no habra nada que retorne por lo tanto
+# Nada a imprimir sera un NoneType el cual no se puede concatenar como string por eso se castea
+print("Current MAC = " + str(current_mac))
+
+change_mac(options.interface, options.new_mac)
