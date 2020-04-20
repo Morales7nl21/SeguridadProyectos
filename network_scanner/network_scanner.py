@@ -16,12 +16,12 @@ def scan (ip):
     arp_request = scapy.ARP(pdst=ip)
 
     # sow muestra mas informacion
-    arp_request.show()
+    # arp_request.show()
 
     # Crea una instancia de un objeto de tipo Eter
     # 2.- Usado para poner la MAC destino como broadcast MAC
     broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
-    broadcast.show()
+    # broadcast.show()
     # !! Modificamos el ip al que va dirigido otra forma es desde que se instancia hacerlo. ver arriba.
     # arp_request.pdst=ip
 
@@ -33,9 +33,16 @@ def scan (ip):
     # !! Combinamos los dos objetos
     arp_request_broadcast = broadcast/arp_request
 
+
+    # Mandar un paquete con un mac customizado lo permite el metodo srp
+    # retorna una pareja de dos listas, el primer elemento de la lista de parejas es
+    # (packet sent, answer) y el segundo de la lista son los paquetes sin responder.
+
+    answered, unanswered = scapy.srp(arp_request_broadcast,timeout = 1)
+
     # Imprimimos lo que nos dio de la variable combinada el metodo summary.
-    print(arp_request_broadcast.summary())
-    arp_request_broadcast.show()
+    print(answered.summary())
+    # arp_request_broadcast.show()
 
 
 
