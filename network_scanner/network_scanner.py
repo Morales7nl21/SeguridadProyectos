@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # Provee la funcion que manda el broadcast pa tener la mac
+
 import scapy.all as scapy
-import optparse
+import argparse
 
 def get_args():
-    parser = optparse.OptionParser()
-    parser.add_option("-t", "--target", dest="target", help="Target to send arp message")
-    (options, arguments) = parser.parse_args()
-    if not options.target:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--target", dest="target", help="Target to send arp message")
+    option = parser.parse_args()
+    if not option.target:
         parser.error("[-] Please especify target, use --help for more info")
-    return options.target
+    return option.target
 
 def scan_result(ip):
 
